@@ -1,0 +1,28 @@
+{
+  "name": "puzzle",
+  "homepage": "https://julfeldt.github.io/puzzle",
+  "version": "1.0.0",
+  "description": "A puzzle for my kid",
+  "main": "webpack.config.js",
+  "scripts": {
+    "watch": "webpack --watch",
+    "deploy": "webpack && gh-pages -d ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/julfeldt/puzzle.git"
+  },
+  "author": "Anders Julfeldt Petersen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/julfeldt/puzzle/issues"
+  },
+  "homepage": "https://github.com/julfeldt/puzzle#readme",
+  "devDependencies": {
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.0",
+    "webpack": "^2.3.3",
+    "gh-pages": "^0.12.0"
+  }
+}
