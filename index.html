@@ -17,11 +17,11 @@
       <div id="app">
         <div id="menu" class="show">
           <div id="levels">
-            <div class="level-item" data-level="2" id="level-0">
+            <div class="level-item level-selected" data-level="2" id="level-0">
               <i class="fa fa-puzzle-piece" aria-hidden="true"></i>
               <span class="level-text">2x2</span>
             </div>
-            <div class="level-item level-selected" data-level="3" id="level-1">
+            <div class="level-item" data-level="3" id="level-1">
               <i class="fa fa-puzzle-piece" aria-hidden="true"></i>
               <span class="level-text">3x3</span>
             </div>
@@ -46,8 +46,10 @@
           <div id="settings">
             <img src="images/settings.png" class="hide"/>
           </div>
+          <div id="retry">
+            <img src="images/retry.png" class="hide"/>
+          </div>
         </div>
-
         <canvas id="canvas" class="hide"></canvas>
         <div id="debug"></div>
       </div>

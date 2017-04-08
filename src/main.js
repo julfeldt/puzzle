@@ -23,6 +23,7 @@ const playIcon = document.querySelector("#play-icon img");
 const menuElement = document.querySelector("#menu")
 const settingsImage = document.querySelector("#settings img")
 const canvasElement = document.querySelector("#canvas")
+const retryImage = document.querySelector("#retry img");
 
 // Disable scrolling on touch devices
 if (isTouchDevice) {
@@ -52,6 +53,9 @@ settingsImage.addEventListener(INTERACTION, (e) => {
 
   settingsImage.classList.remove("show");
   settingsImage.classList.add("hide");
+
+  retryImage.classList.remove("show");
+  retryImage.classList.add("hide");
 
   canvasElement.classList.remove("show");
   canvasElement.classList.add("hide");
@@ -263,6 +267,9 @@ const onShuffled = () => {
 
       if (checkPuzzle()){
         console.log("Weee confetti time!");
+        retryImage.classList.remove("hide");
+        retryImage.classList.add("show");
+
         solved = true;
         refreshPuzzle(!solved);
       }
@@ -279,6 +286,9 @@ const shufflePuzzle = () => {
   if (isMenuOn()) {
     return false;
   }
+
+  retryImage.classList.remove("show");
+  retryImage.classList.add("hide");
 
   solved = false;
   let count = 0;

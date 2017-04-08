@@ -127,6 +127,13 @@ body {
           align-items: flex-end;
 }
 
+#retry {
+  /* This is ok since it is a ipad */
+  position: absolute;
+  left: 290px;
+  top: 400px;
+}
+
 .show {
   visibility: visible;
 }
