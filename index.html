@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/app.css" />
+    <title>Jigsaw</title>
+  </head>
+  <body>
+      <div class="use-portrait">
+        <img class="ipad" src="images/ipad-portrait.png" alt="device" />
+      </div>
+      <div id="app">
+        <div id="menu" class="show">
+          <div id="levels">
+            <div class="level-item" data-level="2" id="level-0">
+              <i class="fa fa-puzzle-piece" aria-hidden="true"></i>
+              <span class="level-text">2x2</span>
+            </div>
+            <div class="level-item level-selected" data-level="3" id="level-1">
+              <i class="fa fa-puzzle-piece" aria-hidden="true"></i>
+              <span class="level-text">3x3</span>
+            </div>
+            <div class="level-item" data-level="4" id="level-2">
+              <i class="fa fa-puzzle-piece" aria-hidden="true"></i>
+              <span class="level-text">4x4</span>
+            </div>
+            <div class="level-item" data-level="5" id="level-3">
+              <i class="fa fa-puzzle-piece" aria-hidden="true"></i>
+              <span class="level-text">5x5</span>
+            </div>
+          </div>
+          <div id="pictures">
+            <div class="picture-item"><img src="images/a.jpg" class="picture-selected" id="picture-0"/></div>
+            <div class="picture-item"><img src="images/b.jpg" id="picture-1"/></div>
+            <div class="picture-item"><img src="images/c.jpg" id="picture-2"/></div>
+            <div class="picture-item"><img src="images/d.jpg" id="picture-3"/></div>
+          </div>
+          <div id="play-icon">
+            <img src="images/play.png"/>
+          </div>
+          <div id="settings">
+            <img src="images/settings.png" class="hide"/>
+          </div>
+        </div>
+
+        <canvas id="canvas" class="hide"></canvas>
+        <div id="debug"></div>
+      </div>
+      <script src="build/bundle.js"></script>
+
+  </body>
+
+</html>
