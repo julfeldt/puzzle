@@ -3,11 +3,13 @@ const ALLOW_MATCHING_NEIGHBORS = false;
 const MAX_ATTEMPT_TO_AVOID_NEIGHBORS = 10;
 const isTouchDevice = 'ontouchstart' in document.documentElement;
 const INTERACTION = isTouchDevice  ? "touchend" : "click";
+const INTERACTION_DOWN = isTouchDevice  ? "mousedown" : "mousedown";
 
 let stage;
 let canvas;
 let pictureUrl = document.querySelectorAll(".picture-item img")[0].src;
 
+const PUZZLE_HOVER_TINT = '#FF0000';
 let img;
 let imgPlayIcon = null;
 let imgSettingsIcon = null;
@@ -17,6 +19,8 @@ let puzzleHeight;
 let pieceWidth;
 let pieceHeight;
 let currentPiece;
+let dragPiece = null;
+let currentDropPiece = null;
 let solved = false;
 let settings = false;
 const playIcon = document.querySelector("#play-icon img");
@@ -124,6 +128,7 @@ const setCanvas = () => {
 const initPuzzle = () => {
   pieces = [];
   currentPiece = null;
+  currentDropPiece = null;
   stage.drawImage(img, 0, 0, puzzleWidth, puzzleHeight, 0, 0, puzzleWidth, puzzleHeight);
   buildPieces();
 }
@@ -228,6 +233,7 @@ const isMenuOn = () => {
 }
 
 const onShuffled = () => {
+
   document.onmousedown = document.ontouchend = document.touchend = (event) => {
 
     if (isMenuOn()) {
@@ -254,10 +260,17 @@ const onShuffled = () => {
       // Ignore action as it is outside the puzzle
       return false;
     }
+
+    let selectedIndex = cursorPosition.indexX + (cursorPosition.indexY * puzzleDifficulty);
+    dragPiece = pieces[selectedIndex];
+
+    /*
     if (currentPiece) {
       let selectedIndex = cursorPosition.indexX + (cursorPosition.indexY * puzzleDifficulty);
       let currentIndex = currentPiece.indexX + (currentPiece.indexY * puzzleDifficulty);
+
       // Switch places
+      currentPiece = null;
       let tmp = pieces[selectedIndex];
       let tmp2 = pieces[currentIndex];
       pieces[selectedIndex] = tmp2;
@@ -276,8 +289,12 @@ const onShuffled = () => {
 
     } else {
       currentPiece = cursorPosition;
-      markPiece(currentPiece);
+      markPiece(currentPiece,event);
     }
+    */
+    currentPiece = cursorPosition;
+    markPiece(currentPiece,event);
+
   };
 }
 
@@ -306,11 +323,99 @@ const checkPuzzle = () => {
     return true;
 }
 
-const markPiece = ({indexX,indexY}) => {
-  stage.globalAlpha = 0.2;
-  stage.fillStyle = "#FF0000";
-  stage.fillRect(indexX*pieceWidth,indexY*pieceHeight,pieceWidth,pieceHeight);
-  stage.globalAlpha = 1.0;
+const markPiece = ({indexX,indexY},event) => {
+
+  /*
+  stage.clearRect(indexX*pieceWidth,indexY*pieceHeight,pieceWidth,pieceHeight);
+  stage.save();
+  stage.globalAlpha = .9;
+  stage.drawImage(img, indexX*pieceWidth,indexY*pieceHeight,pieceWidth,pieceHeight, event.x - (pieceWidth / 2), event.y - (pieceHeight / 2), pieceWidth, pieceHeight);
+  stage.restore();
+  */
+
+  document.onmousemove = document.ontouchmove = updatePuzzle;
+  document.onmouseup = document.ontouchend = pieceDropped;
+}
+
+const updatePuzzle = (event) => {
+  stage.clearRect(0,0,puzzleWidth,puzzleHeight);
+  let mouseX = 0;
+  let mouseY = 0;
+  currentDropPiece = null;
+
+  if(event.layerX || event.layerX == 0){
+      mouseX = event.layerX - canvas.offsetLeft;
+      mouseY = event.layerY - canvas.offsetTop;
+  }
+  else if(event.offsetX || event.offsetX == 0){
+      mouseX = event.offsetX - canvas.offsetLeft;
+      mouseY = event.offsetY - canvas.offsetTop;
+  }
+
+  for (let i = 0 ; i < pieces.length ; i++) {
+    let piece = pieces[i];
+    if (piece === dragPiece) {
+      continue;
+    }
+    let { clipX,clipY } = piece;
+    stage.drawImage(img, clipX, clipY, pieceWidth, pieceHeight, piece.posX, piece.posY, pieceWidth, pieceHeight);
+    stage.strokeRect(piece.posX, piece.posY, pieceWidth,pieceHeight);
+
+    if (currentDropPiece === null) {
+      if(mouseX < piece.posX || mouseX > (piece.posX + pieceWidth) || mouseY < piece.posY || mouseY > (piece.posY + pieceHeight)){
+          //NOT OVER
+      }
+      else{
+          currentDropPiece = piece;
+          stage.save();
+          stage.globalAlpha = .4;
+          stage.fillStyle = PUZZLE_HOVER_TINT;
+          stage.fillRect(currentDropPiece.posX,currentDropPiece.posY,pieceWidth, pieceHeight);
+          stage.restore();
+      }
+    }
+  }
+
+  if (dragPiece) {
+    stage.save();
+    stage.globalAlpha = .5;
+    stage.drawImage(img, dragPiece.clipX, dragPiece.clipY, pieceWidth, pieceHeight, mouseX - (pieceWidth / 2), mouseY - (pieceHeight / 2), pieceWidth, pieceHeight);
+    stage.strokeRect( mouseX - (pieceWidth / 2), mouseY - (pieceHeight / 2), pieceWidth, pieceHeight);
+    stage.restore();
+  }
+
+}
+
+const pieceDropped = (event) => {
+  document.onmousemove = document.ontouchmove = null;
+  document.onmouseup = document.ontouchend = null;
+
+  if (currentDropPiece) {
+
+    let cursorPosition = getCursorPosition(canvas,event)
+    let selectedIndex = cursorPosition.indexX + (cursorPosition.indexY * puzzleDifficulty);
+    let currentIndex = currentPiece.indexX + (currentPiece.indexY * puzzleDifficulty);
+
+    // Switch places
+    currentPiece = null;
+    let tmp = pieces[selectedIndex];
+    let tmp2 = pieces[currentIndex];
+    pieces[selectedIndex] = tmp2;
+    pieces[currentIndex] = tmp;
+    currentPiece = null;
+    refreshPuzzle();
+
+    if (checkPuzzle()){
+      console.log("Weee confetti time!");
+      retryImage.classList.remove("hide");
+      retryImage.classList.add("show");
+      solved = true;
+      refreshPuzzle(!solved);
+    }
+
+  } else {
+    refreshPuzzle(false);
+  }
 }
 
 const getCursorPosition = (canvas, event) => {
