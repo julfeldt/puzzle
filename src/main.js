@@ -1,4 +1,5 @@
 import { play, stopSound } from "./sound";
+import { showConfetti } from "./confetti";
 
 let puzzleDifficulty = 2;
 const ALLOW_MATCHING_NEIGHBORS = false;
@@ -32,6 +33,7 @@ const playIcon = document.querySelector("#play-icon img");
 const menuElement = document.querySelector("#menu");
 const settingsImage = document.querySelector("#settings img");
 const canvasElement = document.querySelector("#canvas");
+const confettiElement = document.querySelector("#confetti");
 const retryImage = document.querySelector("#retry img");
 
 // Disable scrolling on touch devices
@@ -68,6 +70,9 @@ settingsImage.addEventListener(INTERACTION, e => {
 
   canvasElement.classList.remove("show");
   canvasElement.classList.add("hide");
+
+  confettiElement.classList.remove("show");
+  confettiElement.classList.add("hide");
 
   document.onmousedown = document.ontouchend = document.touchend = null;
 });
@@ -271,6 +276,8 @@ const onShuffled = () => {
     }
 
     if (solved) {
+      confettiElement.classList.remove("show");
+      confettiElement.classList.add("hide");
       shufflePuzzle();
       return;
     }
@@ -308,6 +315,7 @@ const shufflePuzzle = () => {
 
   solved = false;
   let count = 0;
+
   shuffleProperly(count, onShuffled);
 };
 
@@ -419,6 +427,12 @@ const pieceDropped = event => {
       retryImage.classList.remove("hide");
       retryImage.classList.add("show");
       solved = true;
+
+      // Queue the confetti cannon
+      confettiElement.classList.remove("hide");
+      confettiElement.classList.add("show");
+      showConfetti();
+
       refreshPuzzle(false);
     }
   } else {
