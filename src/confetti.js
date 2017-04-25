@@ -1,18 +1,18 @@
 //canvas init
-var canvas = document.getElementById("confetti");
-var ctx = canvas.getContext("2d");
-var confettiTimer;
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+let confettiTimer;
 
 //canvas dimensions
-var W = window.innerWidth;
-var H = window.innerHeight;
+const W = window.innerWidth;
+const H = window.innerHeight;
 canvas.width = W;
 canvas.height = H;
 
 //snowflake particles
-var mp = 200; //max particles
-var particles = [];
-for (var i = 0; i < mp; i++) {
+const mp = 200; //max particles
+const particles = [];
+for (let i = 0; i < mp; i++) {
     particles.push({
         x: Math.random() * W, //x-coordinate
         y: Math.random() * H, //y-coordinate
@@ -30,11 +30,11 @@ for (var i = 0; i < mp; i++) {
 }
 
 //Lets draw the flakes
-function draw() {
+const draw = () => {
     ctx.clearRect(0, 0, W, H);
 
-    for (var i = 0; i < mp; i++) {
-        var p = particles[i];
+    for (let i = 0; i < mp; i++) {
+        let p = particles[i];
         ctx.beginPath();
         ctx.lineWidth = p.r;
         ctx.strokeStyle = p.color; // Green path
@@ -44,16 +44,16 @@ function draw() {
     }
 
     update();
-}
+};
 
 //Function to move the snowflakes
 //angle will be an ongoing incremental flag. Sin and Cos functions will be applied to it to create vertical and horizontal movements of the flakes
-var angle = 0;
+let angle = 0;
 
-function update() {
+const update = () => {
     angle += 0.01;
-    for (var i = 0; i < mp; i++) {
-        var p = particles[i];
+    for (let i = 0; i < mp; i++) {
+        let p = particles[i];
         //Updating X and Y coordinates
         //We will add 1 to the cos function to prevent negative values which will lead flakes to move upwards
         //Every particle has its own density which can be used to make the downward movement different for each flake
@@ -100,13 +100,13 @@ function update() {
             }
         }
     }
-}
+};
 
-export function showConfetti() {
+export const showConfetti = () => {
     // Ensure potential already confettis are stopped
     if (confettiTimer) {
         clearTimeout(confettiTimer);
     }
     //animation loop
     confettiTimer = setInterval(draw, 30);
-}
+};

@@ -102,12 +102,15 @@ const handleTouchOnMenuItems = (idPrefix, selectedClass, onSelect) => {
 
 handleTouchOnMenuItems("picture", "picture-selected", element => {
   pictureUrl = element.src;
+  stopSound(true);
+  const picId = element.id;
+  play(picId.substring(picId.indexOf("-") + 1), "picture");
 });
 
 handleTouchOnMenuItems("level", "level-selected", element => {
   puzzleDifficulty = parseInt(element.getAttribute("data-level"));
   stopSound(true);
-  play(puzzleDifficulty, "level");
+  play(puzzleDifficulty - 2, "level");
 });
 
 const init = () => {
@@ -278,6 +281,7 @@ const onShuffled = () => {
     if (solved) {
       confettiElement.classList.remove("show");
       confettiElement.classList.add("hide");
+      stopSound(true);
       shufflePuzzle();
       return;
     }
@@ -431,6 +435,8 @@ const pieceDropped = event => {
       // Queue the confetti cannon
       confettiElement.classList.remove("hide");
       confettiElement.classList.add("show");
+
+      play(0, "victory");
       showConfetti();
 
       refreshPuzzle(false);
