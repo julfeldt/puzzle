@@ -159,7 +159,7 @@ body {
   display: none;
 }
 
-@media screen and (orientation: xlandscape) {
+@media screen and (orientation: landscape) {
 
    #app {
     display: none;
