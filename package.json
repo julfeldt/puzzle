@@ -1,6 +1,6 @@
 {
   "name": "puzzle",
-  "homepage": "https://julfeldt.github.io/puzzle",
+  "homepage": "https://github.com/julfeldt/puzzle#readme",
   "version": "1.0.0",
   "description": "A puzzle for my kid",
   "main": "webpack.config.js",
@@ -17,7 +17,6 @@
   "bugs": {
     "url": "https://github.com/julfeldt/puzzle/issues"
   },
-  "homepage": "https://github.com/julfeldt/puzzle#readme",
   "devDependencies": {
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
